@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
     openacs:
-        image: sussdorff/openacs
+        image: sussdorff/openacs:oacs-5-10
         depends_on: 
             - postgres
         ports: 
@@ -21,7 +21,7 @@ services:
             retries: 2
 
     postgres:
-        image: postgres:10-alpine
+        image: postgres:11-alpine
         environment: 
             - POSTGRES_PASSWORD=testing
             - POSTGRES_USER=openacs
