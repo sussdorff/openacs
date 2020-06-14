@@ -10,7 +10,13 @@ ns_log notice "nsd.tcl: starting to read config file..."
 
 #---------------------------------------------------------------------
 # Change the HTTP and HTTPS port to e.g. 80 and 443 for production use.
-set httpport		8000
+
+source /run/secrets/config_vars
+switch $httpport {
+	443 - 8443 {
+        set httpsport $httpport
+	}
+}
 
 #
 # Setting the HTTPS port to 0 means to active the https driver for
@@ -21,7 +27,7 @@ set httpport		8000
 
 # The hostname and address should be set to actual values.
 # setting the address to 0.0.0.0 means AOLserver listens on all interfaces
-set hostname		localhost
+
 #set address_v4		127.0.0.1  ;# listen on loopback via IPv4
 set address_v4		0.0.0.0    ;# listen on all IPv4 addresses
 #set address_v6		::1        ;# listen on loopback via IPv6
@@ -32,10 +38,10 @@ set address_v4		0.0.0.0    ;# listen on all IPv4 addresses
 # '-b address:port' which matches the address and port
 # as specified above.
 
-set server		"openacs"
+set server "openacs"
+
 set servername		"New OpenACS Installation - Development"
 
-set serverroot		/var/www/$server
 set logroot		$serverroot/log/
 
 set homedir		/usr/local/ns
@@ -47,39 +53,38 @@ set proxy_mode		false
 #---------------------------------------------------------------------
 # Which database do you want? PostgreSQL or Oracle?
 set database              postgres
-set db_name               $server
+
+set db_name openacs
 
 if { $database eq "oracle" } {
     set db_password           "mysitepassword"
 } else {
     set db_host               postgres
     set db_port               ""
-    set db_user               $server
-        if {[info exists ::env(POSTGRES_PASSWORD)]} {
-        set db_password $::env(POSTGRES_PASSWORD)
-    } else {
+    set db_user               [exec cat /run/secrets/psql_user]
+    if {$db_user eq ""} {
+        set db_user $server
+    }
+    set db_password           [exec cat /run/secrets/psql_password]
+    if {$db_password eq ""} {
         set db_password           testing
     }
 }
 
 #---------------------------------------------------------------------
 # If debug is false, all debugging will be turned off.
-if {[info exists ::env(NS_DEBUG)]} {
-    set debug $::env(NS_DEBUG)
+if {$develop_p} {
+    set debug true
+    set dev true
+    set verboseSQL true
 } else {
     set debug false
-}
-
-if {[info exists ::env(NS_DEV)]} {
-    set dev $::env(NS_DEV)
-} else {
     set dev false
+    set verboseSQL false
 }
 
-if {[info exists ::env(NS_verboseSQL)]} {
-    set verboseSQL $::env(NS_verboseSQL)
-} else {
-    set verboseSQL false
+if {$staging_p} {
+    set debug true
 }
 
 set max_file_upload_mb        20
