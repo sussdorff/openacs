@@ -1,4 +1,4 @@
-FROM sussdorff/naviserver
+FROM oupfiz5/naviserver-s6:latest
 
 RUN mkdir -p /var/www
 
