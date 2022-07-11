@@ -1,19 +1,18 @@
-FROM sussdorff/naviserver
+FROM sussdorff/naviserver:4.99.24
 
 
-RUN apt-get update && apt-get install cvs -y && mkdir -p /var/www
-RUN cvs -q -d:pserver:anonymous@cvs.openacs.org:/cvsroot checkout -r oacs-5-10 acs-core && mv openacs-4 /var/www/openacs
+RUN apt-get update && apt-get upgrade -y && apt-get install git -y && mkdir -p /var/www
+RUN git clone -b oacs-5-10 https://github.com/openacs/openacs-core.git && mv openacs-core /var/www/openacs
 RUN mkdir -p /var/www/openacs/log
 
 WORKDIR /var/www/openacs/packages
 
-RUN cvs -q -d:pserver:anonymous@cvs.openacs.org:/cvsroot -q checkout -r oacs-5-10 xotcl-all \
-    && cvs -q -d:pserver:anonymous@cvs.openacs.org:/cvsroot -q checkout -r oacs-5-10 xowf \
-    && cvs -q -d:pserver:anonymous@cvs.openacs.org:/cvsroot -q checkout -r oacs-5-10 acs-developer-support ajaxhelper \
-    && cvs -q -d:pserver:anonymous@cvs.openacs.org:/cvsroot -q checkout -r oacs-5-10 openacs-4/packages/richtext-ckeditor4 \
-    && mv openacs-4/packages/richtext-ckeditor4 . && rm -rf openacs-4 \
-    && cd /var/www/openacs && rm -rf openacs-4 \
-    && mkdir -p /var/www/openacs/www/admin && cp /usr/local/ns/pages/nsstats.tcl /var/www/openacs/www/admin/nsstats.tcl \
+
+RUN git clone -b oacs-5-10 https://github.com/openacs/xotcl-core.git && git clone -b oacs-5-10 https://github.com/openacs/xotcl-request-monitor.git \
+    && git clone -b oacs-5-10 https://github.com/openacs/ajaxhelper \
+    && git clone -b oacs-5-10 https://github.com/openacs/richtext-ckeditor4 
+
+RUN mkdir -p /var/www/openacs/www/admin && cp /usr/local/ns/pages/nsstats.tcl /var/www/openacs/www/admin/nsstats.tcl \
     && chown -R nsadmin.nsadmin /var/www/openacs
 
 
