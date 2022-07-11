@@ -1,10 +1,10 @@
-FROM oupfiz5/naviserver-s6:latest
+FROM sussdorff/naviserver:latest
 
 RUN mkdir -p /var/www
 
 WORKDIR /var/www
 
-RUN wget --quiet https://openacs.org/projects/openacs/download/download/openacs-5.9.1-core.tar.gz \
+RUN wget https://openacs.org/projects/openacs/download/download/openacs-5.9.1-core.tar.gz \
     && tar xfz openacs-5.9.1-core.tar.gz \
     && mv openacs-5.9.1 openacs \
     && chown -R nsadmin:nsadmin /var/www/openacs
