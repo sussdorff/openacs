@@ -2,15 +2,14 @@ FROM sussdorff/naviserver:4.99.24
 
 
 RUN apt-get update && apt-get upgrade -y && apt-get install git -y && mkdir -p /var/www
-RUN git clone -b oacs-5-10 https://github.com/openacs/openacs-core.git && mv openacs-core /var/www/openacs
+RUN git clone -b oacs-5-8 https://github.com/openacs/openacs-core.git && mv openacs-core /var/www/openacs
 RUN mkdir -p /var/www/openacs/log
 
 WORKDIR /var/www/openacs/packages
 
 
-RUN git clone -b oacs-5-10 https://github.com/openacs/xotcl-core.git && git clone -b oacs-5-10 https://github.com/openacs/xotcl-request-monitor.git \
-    && git clone -b oacs-5-10 https://github.com/openacs/ajaxhelper \
-    && git clone -b oacs-5-10 https://github.com/openacs/richtext-ckeditor4 
+RUN git clone -b oacs-5-8 https://github.com/openacs/xotcl-core.git && git clone -b oacs-5-8 https://github.com/openacs/xotcl-request-monitor.git \
+    && git clone -b oacs-5-8 https://github.com/openacs/ajaxhelper 
 
 RUN mkdir -p /var/www/openacs/www/admin && cp /usr/local/ns/pages/nsstats.tcl /var/www/openacs/www/admin/nsstats.tcl \
     && chown -R nsadmin.nsadmin /var/www/openacs
