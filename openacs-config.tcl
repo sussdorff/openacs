@@ -87,9 +87,6 @@ if {$staging_p} {
     set debug true
 }
 
-set max_file_upload_mb        20
-set max_file_upload_min        5
-
 #---------------------------------------------------------------------
 # Set environment variables HOME and LANG. HOME is needed since
 # otherwise some programs called via exec might try to write into the
