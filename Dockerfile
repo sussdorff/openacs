@@ -1,4 +1,4 @@
-FROM sussdorff/naviserver:4.99.24
+FROM sussdorff/naviserver:4.99.30
 
 
 RUN apt-get update && apt-get upgrade -y && apt-get install git -y && apt-get autoremove && apt-get clean -y && mkdir -p /var/www \
